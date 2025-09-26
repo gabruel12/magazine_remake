@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "magazine_requestest",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
