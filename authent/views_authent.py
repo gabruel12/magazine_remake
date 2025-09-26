@@ -56,15 +56,11 @@ def login(request):
 def delete(request, username_selected):
     if request.method != "GET":
         return JsonResponse({'error': 'Method not allowed'}, status=405)
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
-    
-    username_selected = request.GET.get('username')
+
     if Users.objects.filter(username=username_selected).exists():
         user_obj = Users.objects.get(username=username_selected)
         user_obj.delete()
+        logger("success_user_delete", thing=username_selected)
         return JsonResponse({'success': 'deleted account!'}, status=200)
     else:
         return JsonResponse({'error': 'User not exists'}, status=400)

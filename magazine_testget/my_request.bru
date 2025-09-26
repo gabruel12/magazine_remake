@@ -1,0 +1,26 @@
+meta {
+  name: my_request
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://127.0.0.1:8000/rooms/new%20room/filter/
+  body: none
+  auth: inherit
+}
+
+headers {
+  : 
+}
+
+body:json {
+  {
+    "room_name": "test",
+    "room_capacity": "10"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

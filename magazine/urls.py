@@ -18,12 +18,14 @@ from django.contrib import admin
 from django.urls import path
 from authent import views_authent as va
 from rooms import views_rooms as vr
+from reserves import views_reserves as vrv
 
 urlpatterns = [
-    path('authent/login/', va.login, name="login"),
-    path('authent/cadaster/', va.cadaster, name="cadaster"),
+    path('authent/login/', va.login, name="user_login"),
+    path('authent/cadaster/', va.cadaster, name="user_cadaster"),
+    path('authent/<str:username_selected>/delete/', va.delete, name="user_delete"),
     path('rooms/create/', vr.create, name="create"),
-    path('rooms/<str:id>/delete/', vr.delete, name="delete"),
-    path('rooms/<str:name>/schedule/', vr.schedule, name="schedule"),
-    path('rooms/<str:name>/filter', vr.filter, name="filter"),
+    path('rooms/<int:room_id>/delete/', vr.delete, name="delete"),
+    path('rooms/<str:room_name>/schedule/', vrv.schedules, name="schedule"),
+    path('rooms/<str:room_name>/filter/', vr.filter, name="filter"),
 ]
