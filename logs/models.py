@@ -7,6 +7,11 @@ class Log(models.Model):
     datetime = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return f"{self.text}: {self.datetime}"
+
+    def save(self, *args, **kwargs):
+        self.datatime = datetime.now()
+
+        super().save(*args, **kwargs)
     
 # def -> {thing} -> {message} --> create a log in Logs
 
