@@ -1,15 +1,15 @@
 from django.db import models
-from datetime import date
+from datetime import datetime
 from django.utils import timezone
 
 class Log(models.Model):
     text = models.TextField(max_length=255)
-    datetime = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return f"{self.text}: {self.datetime}"
 
     def save(self, *args, **kwargs):
-        self.datatime = datetime.now()
+        self.date = datetime.now()
 
         super().save(*args, **kwargs)
     
