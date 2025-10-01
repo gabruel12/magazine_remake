@@ -6,12 +6,14 @@ from rooms.models import Room
 from reserves.models import Schedules
 
 @csrf_exempt
-def schedules(request):
-    room_name = method.GET.get('room')
-    room = get_object_or_404(Room, name=room_name)
+def toschedule(request, user):
+    if request.method != "GET":
 
-    if request.method == "POST":
-        room_name_db = request.POST.get('Room_Name')
-        date = reqeust.POST.get('Schedule_Date')
-        
-    
+@csrf_exempt
+def appointments(request, room_name):
+    if request.method != "GET":
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    if Room.objects.filter(name=room_name).exists():
+        return JsonResponse({'success': f'This is appointments who {room_name} have!'}, status=200)
+    else:
+        return JsonResponse({'error': 'This room does not exists'}, status=400)  # <-- mostrar agendamentos depois 

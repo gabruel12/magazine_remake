@@ -3,17 +3,18 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from authent.models import Users
 from logs.models import logger
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as django_login
 
 @csrf_exempt
 def cadaster(request):
     if request.method != "POST":
         return JsonResponse({'error': 'Method not allowed'}, status=405)
-
     try:
         data = json.loads(request.body)
-    except json.JSONDecodeError:
+    except json.JSONDecoderError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
+        
     name = data.get('Name')
     username = data.get('Username')
     username = username.lower()
@@ -30,25 +31,33 @@ def cadaster(request):
     user.save()
     logger("success_user_create", thing=user)
     return JsonResponse({'success': 'The user was create'}, status=201)
-    
+
+@csrf_exempt
+def loged(request, user):
+    if request.method != "GET":
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    if Users.objects.filter(username=user).exists():
+        return JsonResponse({'success': f'Hello, {user}!'}, status=200)
+    else:
+        return JsonResponse({'error': 'user not exists'}, status=400)
+
 @csrf_exempt
 def login(request):
-    if request.method != 'POST':
+    if request.method != "POST":
         return JsonResponse({'error': 'Method not allowed'}, status=405)
     try:
         data = json.loads(request.body)
     except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
-    
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
     username_selected = data.get('Username')
     your_password = data.get('Password')
-    
-    if Users.objects.filter(username=username_selected).exists():
-        if Users.objects.filter(password=your_password):
-            logger("success_user_login", thing=username_selected)
-            return JsonResponse({'success': 'Welcome back!'})
-        else:
-            return JsonResponse({'error': 'Incorrect password.'}, status=400)
+
+    user = authenticate(request, username=username_selected, password=your_password)
+
+    if user is not None:
+        django_login(request, user)
+        return JsonResponse({'success': f'Welcome back {username_selected}!'}, status=200)
     else:
         return JsonResponse({'error': 'User not exists'}, status=400)
 

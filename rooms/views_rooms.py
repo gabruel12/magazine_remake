@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rooms.models import Room
+from logs.models import logger
 
 @csrf_exempt
 def create(request):
@@ -23,6 +24,7 @@ def create(request):
     create_room.full_clean()
     create_room.save()
 
+    logger("success_room_create", thing=room_name)
     return JsonResponse({'success': 'The room was create.'}, status=201)
 
 def filter(request, room_name):
@@ -42,10 +44,12 @@ def filter(request, room_name):
 def delete(request, room_id):
     if request.method != "GET":
         return JsonResponse({'error': 'Method not allowed.'}, status=405)
+        
     if Room.objects.filter(id=room_id).exists(): 
         room_obj = Room.objects.get(id=room_id)
         room_obj.delete()
 
+        logger("success_room_delete", thing=room_obj)
         return JsonResponse({'success:': 'The room is deleted.'})
     else:
         return JsonResponse({'error': 'This room not exists.'}, status=400)
