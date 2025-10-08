@@ -4,8 +4,8 @@ meta {
   seq: 1
 }
 
-post {
-  url: http://127.0.0.1:8000/authent/login/
+get {
+  url: http://127.0.0.1:8000/rooms/test/appointments/
   body: json
   auth: inherit
 }
@@ -16,8 +16,8 @@ headers {
 
 body:json {
   {
-    "Username": "gabruel",
-    "Password": "gabriel123"
+    "Start-time": "2025-10-02 12:00",
+    "End-time": "2025-10-02 13:00"
   }
 }
 

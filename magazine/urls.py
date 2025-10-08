@@ -21,13 +21,14 @@ from rooms import views_rooms as vr
 from reserves import views_reserves as vrv
 
 urlpatterns = [
-    path('authent/login/', va.user_login, name="user_login"),
+    path('authent/login/', va.login, name="user_login"),
     path('authent/loged/<str:user>/', va.loged,  name="user_loged"),
     path('authent/cadaster/', va.cadaster, name="user_cadaster"),
     path('authent/<str:username_selected>/delete/', va.delete, name="user_delete"),
     path('rooms/create/', vr.create, name="create"),
     path('rooms/<int:room_id>/delete/', vr.delete, name="delete"),
     path('rooms/<str:room_name>/appointments/', vrv.appointments, name="appointments"),
-    path('rooms/<str:user>/toschedulle/', vrv.toschedule, name="schedule"),
+    path('rooms/<str:room_name>/toschedule/', vrv.toschedule, name="schedule"),
     path('rooms/<str:room_name>/filter/', vr.filter, name="filter"),
+    path('rooms/<str:schedule_id>/toschedule/delete/', vrv.del_schedule, name="del_schedule")
 ]
